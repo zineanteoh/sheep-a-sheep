@@ -49,6 +49,25 @@ const Plotter = () => {
 			});
 	}, []);
 
+	const generateColorByLayer = (): string[] => {
+		const MAX_LAYER = coordinates[coordinates.length - 1].layerNum;
+		// generate MAX_LAYER number of unique colors
+		let uniqueColors: string[] = [];
+		for (let i = 0; i < MAX_LAYER; i++) {
+			uniqueColors[i] = `rgb(${Math.floor(
+				Math.random() * 255
+			)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
+				Math.random() * 255
+			)})`;
+		}
+		let colorByLayer: string[] = [];
+		coordinates.forEach((coordinate, index) => {
+			// assign a color to each coordinate based on its layer
+			colorByLayer[index] = uniqueColors[coordinate.layerNum];
+		});
+		return colorByLayer;
+	};
+
 	const unpack = (rows: ICoordinateArray, key: Coordinate) => {
 		let result: number[] = [];
 		for (let row of rows) {
@@ -57,68 +76,70 @@ const Plotter = () => {
 		return result;
 	};
 
-	const data: Plotly.Data[] = [
-		{
-			type: "scatter3d",
-			x: unpack(coordinates, Coordinate.ROW),
-			y: unpack(coordinates, Coordinate.COL),
-			z: unpack(coordinates, Coordinate.LAYER),
-			mode: "markers",
-			marker: {
-				symbol: "square",
-				size: 10,
-			},
-		},
-	];
-
-	const layout: Partial<Plotly.Layout> = {
-		scene: {
-			aspectratio: {
-				x: 1,
-				y: 1,
-				z: 2,
-			},
-			camera: {
-				center: {
-					x: 0,
-					y: 0,
-					z: 0,
-				},
-				eye: {
-					x: 1.25,
-					y: 1.25,
-					z: 1.25,
-				},
-				up: {
-					x: 0,
-					y: 0,
-					z: 1,
-				},
-			},
-			xaxis: {
-				type: "linear",
-				zeroline: false,
-			},
-			yaxis: {
-				type: "linear",
-				zeroline: false,
-			},
-			zaxis: {
-				type: "linear",
-				zeroline: false,
-			},
-		},
-		title: "Sheep Plotter",
-		autosize: true,
-		height: 800,
-		width: 800,
-	};
-
 	return (
 		<>
 			{!loaded && <div>Loading</div>}
 
-			{loaded && <Plot data={data} layout={layout} />}
+			{loaded && (
+				<Plot
+					data={[
+						{
+							type: "scatter3d",
+							x: unpack(coordinates, Coordinate.ROW),
+							y: unpack(coordinates, Coordinate.COL),
+							z: unpack(coordinates, Coordinate.LAYER),
+							mode: "markers",
+							marker: {
+								color: generateColorByLayer(),
+								symbol: "square",
+								size: 11,
+							},
+						},
+					]}
+					layout={{
+						scene: {
+							aspectratio: {
+								x: 1,
+								y: 1,
+								z: 2,
+							},
+							camera: {
+								center: {
+									x: 0,
+									y: 0,
+									z: 0,
+								},
+								eye: {
+									x: 1.25,
+									y: 1.25,
+									z: 1.25,
+								},
+								up: {
+									x: 0,
+									y: 0,
+									z: 1,
+								},
+							},
+							xaxis: {
+								type: "linear",
+								zeroline: false,
+							},
+							yaxis: {
+								type: "linear",
+								zeroline: false,
+							},
+							zaxis: {
+								type: "linear",
+								zeroline: false,
+							},
+						},
+						title: "Sheep Plotter",
+						autosize: true,
+						height: 800,
+						width: 800,
+					}}
+				/>
+			)}
 		</>
 	);
 };
