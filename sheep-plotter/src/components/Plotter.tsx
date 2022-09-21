@@ -135,7 +135,7 @@ const Plotter = () => {
 						},
 						title: "Sheep Plotter",
 						autosize: true,
-						height: 800,
+						height: 1000,
 						width: 800,
 					}}
 				/>
