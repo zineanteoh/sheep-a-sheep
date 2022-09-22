@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Plotly from "plotly.js";
 import createPlotlyComponent from "react-plotly.js/factory";
-import inputFile from "../data/coordinates.txt";
+import inputFile from "../data/coordinates_2.txt";
 const Plot = createPlotlyComponent(Plotly);
 
 // create an interface called ICoordinateArray that contains an array of ICoordinate
